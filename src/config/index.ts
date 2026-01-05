@@ -1,14 +1,8 @@
 import dotenv from "dotenv";
 
+// Load environment variables from .env file
 dotenv.config();
 
-export const config = {
-  port: process.env.PORT || 3000,
-  mongoUri: process.env.MONGO_URI as string,
-  jwtSecret: process.env.JWT_SECRET as string,
-};
-
-export default config;
-
-
-
+export const PORT: number = Number(process.env.PORT) || 5000;
+export const MONGO_URI: string = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/smartnews";
+export const JWT_SECRET: string = process.env.JWT_SECRET || "default";
