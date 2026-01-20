@@ -1,10 +1,15 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
+import { authorizedMiddleware } from "../middlewares/authorized.middleware";
 
+
+let authController = new AuthController();
 const router = Router();
-const authController = new AuthController();
 
-router.post("/register", authController.register.bind(authController));
-router.post("/login", authController.login.bind(authController));
+router.post("/register", authController.register)
+router.post("/login", authController.login)
+// add remaning routes like login, logout, etc.
+
+router.get("/whoami", authorizedMiddleware, authController.getUserById);
 
 export default router;

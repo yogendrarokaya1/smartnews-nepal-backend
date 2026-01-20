@@ -1,4 +1,4 @@
-import { CreateUserDTO, CreateUserTypeDTO, LoginUserDTO } from "../dtos/user.dto";
+import { CreateUserDTO, LoginUserDTO } from "../dtos/user.dto";
 import { UserRepository } from "../repositories/user.repository";
 import bcryptjs from "bcryptjs";
 import { HttpError } from "../errors/http-error";
@@ -12,7 +12,7 @@ export class UserService {
   // --------------------
   // Register User
   // --------------------
-  async createUser(data: CreateUserTypeDTO) {
+  async createUser(data: CreateUserDTO) {
     // Check if email already exists
     const emailCheck = await userRepository.getUserByEmail(data.email);
     if (emailCheck) {
@@ -35,7 +35,7 @@ export class UserService {
       email: data.email,
       phoneNumber: data.phoneNumber,
       password: data.password,
-      role: data.role || "user",
+      role: "user",
     });
 
     return newUser;
@@ -69,4 +69,12 @@ export class UserService {
 
     return { token, user };
   }
+
+   async getUserById(id: string){
+        const user = await userRepository.getUserById(id);
+        if(!user){
+            throw new HttpError(404, "User not found");
+        }
+        return user;
+    }
 }

@@ -9,7 +9,7 @@ export const CreateUserDTO = UserSchema.pick({
   email: true,
   phoneNumber: true,
   password: true,
-  role: true, // optional, default is 'user'
+  // role: true, // optional, default is 'user'
 })
   .extend({
     confirmPassword: z.string().min(6, "Confirm Password must be at least 6 characters"),
@@ -19,7 +19,7 @@ export const CreateUserDTO = UserSchema.pick({
     path: ["confirmPassword"],
   });
 
-export type CreateUserTypeDTO = z.infer<typeof CreateUserDTO>;
+export type CreateUserDTO = z.infer<typeof CreateUserDTO>;
 
 // --------------------
 // Login User DTO
