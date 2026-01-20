@@ -1,5 +1,5 @@
 import { UserService } from "../services/user.service";
-import { CreateUserDTO, LoginUserDTO } from "../dtos/user.dto";
+import { CreateUserDTO, CreateUserTypeDTO, LoginUserDTO } from "../dtos/user.dto";
 import { Request, Response } from "express";
 import z from "zod";
 
@@ -15,7 +15,7 @@ export class AuthController {
           message: z.prettifyError(parsedData.error),
         });
 
-      const userData: CreateUserDTO = parsedData.data;
+      const userData: CreateUserTypeDTO = parsedData.data;
       const newUser = await userService.createUser(userData);
       return res.status(201).json({
         success: true,

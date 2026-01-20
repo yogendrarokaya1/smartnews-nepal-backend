@@ -1,4 +1,4 @@
-import { CreateUserDTO, LoginUserDTO } from "../dtos/user.dto";
+import { CreateUserDTO, CreateUserTypeDTO, LoginUserDTO } from "../dtos/user.dto";
 import { UserRepository } from "../repositories/user.repository";
 import bcryptjs from "bcryptjs";
 import { HttpError } from "../errors/http-error";
@@ -12,7 +12,7 @@ export class UserService {
   // --------------------
   // Register User
   // --------------------
-  async createUser(data: CreateUserDTO) {
+  async createUser(data: CreateUserTypeDTO) {
     // Check if email already exists
     const emailCheck = await userRepository.getUserByEmail(data.email);
     if (emailCheck) {

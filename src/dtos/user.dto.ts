@@ -1,4 +1,4 @@
-import z from "zod";
+import {z} from "zod/v3";
 import { UserSchema } from "../types/user.type";
 
 // --------------------
@@ -19,7 +19,7 @@ export const CreateUserDTO = UserSchema.pick({
     path: ["confirmPassword"],
   });
 
-export type CreateUserDTO = z.infer<typeof CreateUserDTO>;
+export type CreateUserTypeDTO = z.infer<typeof CreateUserDTO>;
 
 // --------------------
 // Login User DTO
