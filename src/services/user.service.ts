@@ -35,7 +35,7 @@ export class UserService {
       email: data.email,
       phoneNumber: data.phoneNumber,
       password: data.password,
-      role: data.role || "user",
+      role: "user",
     });
 
     return newUser;
@@ -69,4 +69,12 @@ export class UserService {
 
     return { token, user };
   }
+
+   async getUserById(id: string){
+        const user = await userRepository.getUserById(id);
+        if(!user){
+            throw new HttpError(404, "User not found");
+        }
+        return user;
+    }
 }
