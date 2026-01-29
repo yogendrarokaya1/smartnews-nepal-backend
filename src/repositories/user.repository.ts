@@ -1,8 +1,6 @@
 import { UserModel, IUser } from "../models/user.model";
 export interface IUserRepository {
     getUserByEmail(email: string): Promise<IUser | null>;
-    // Additional
-    // 5 common database queries for entity
     createUser(userData: Partial<IUser>): Promise<IUser>;
     getUserById(id: string): Promise<IUser | null>;
     getAllUsers(): Promise<IUser[]>;
@@ -19,10 +17,8 @@ export class UserRepository implements IUserRepository {
         const user = await UserModel.findOne({ "email": email })
         return user;
     }
-    async getUserByPhone(phoneNumber: string): Promise<IUser | null> {
-        const user = await UserModel.findOne({ "phoneNumber": phoneNumber })
-        return user;
-    }
+
+
     async getUserById(id: string): Promise<IUser | null> {
         // UserModel.findOne({ "_id": id });
         const user = await UserModel.findById(id);
