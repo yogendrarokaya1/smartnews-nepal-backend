@@ -1,48 +1,65 @@
+import { CreateUserDTO, LoginUserDTO, UpdateUserDTO } from "../../dtos/user.dto";
 import { UserRepository } from "../../repositories/user.repository";
-import bcryptjs from "bcryptjs"
-import { CreateUserDTO } from "../../dtos/user.dto";
+import  bcryptjs from "bcryptjs"
 import { HttpError } from "../../errors/http-error";
+
 let userRepository = new UserRepository();
+
 export class AdminUserService {
     async createUser(data: CreateUserDTO){
-        // same as src/services/user.service.ts
         const emailCheck = await userRepository.getUserByEmail(data.email);
-            if (emailCheck) {
-              throw new HttpError(403, "Email already in use");
-            }
-        
-            // Check if phone already exists
-            const phoneCheck = await userRepository.getUserByPhone(data.phoneNumber);
-            if (phoneCheck) {
-              throw new HttpError(403, "Phone number already in use");
-            }
-        
-            // Hash password
-            const hashedPassword = await bcryptjs.hash(data.password, 10);
-            data.password = hashedPassword;
-        
-            // Create user
-            const newUser = await userRepository.createUser({
-              fullName: data.fullName,
-              email: data.email,
-              phoneNumber: data.phoneNumber,
-              password: data.password,
-              role: "user",
-            });
-        
-            return newUser;
+        if(emailCheck){
+            throw new HttpError(403, "Email already in use");
+        }
+        // hash password
+        const hashedPassword = await bcryptjs.hash(data.password, 10); // 10 - complexity
+        data.password = hashedPassword;
+
+        const newUser = await userRepository.createUser(data);
+        return newUser;
     }
-    async getAllUsers(){
-        const users = await userRepository.getAllUsers();
-        // transformation or filtering logic can be added here
-        return users;
+
+    async getAllUsers(
+        page?: string, size?: string, search?: string
+    ){
+        const pageNumber = page ? parseInt(page) : 1;
+        const pageSize = size ? parseInt(size) : 10;
+        const {users, total} = await userRepository.getAllUsers(
+            pageNumber, pageSize, search
+        );
+        const pagination = {
+            page: pageNumber,
+            size: pageSize,
+            totalItems: total,
+            totalPages: Math.ceil(total / pageSize)
+        }
+        return {users, pagination};
     }
-    async getOneUser(id: string){
+
+    async deleteUser(id: string){
+        const user = await userRepository.getUserById(id);
+        if(!user){
+            throw new HttpError(404, "User not found");
+        }
+        const deleted = await userRepository.deleteUser(id);
+        return deleted;
+    }
+
+    async updateUser(id: string, updateData: UpdateUserDTO){
+        const user = await userRepository.getUserById(id);
+        if(!user){
+            throw new HttpError(404, "User not found");
+        }
+        const updatedUser = await userRepository.updateUser(id, updateData);
+        return updatedUser;
+    }
+
+    async  getUserById(id: string){
         const user = await userRepository.getUserById(id);
         if(!user){
             throw new HttpError(404, "User not found");
         }
         return user;
     }
-    // continue all
+
 }
