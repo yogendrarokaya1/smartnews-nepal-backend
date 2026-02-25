@@ -8,6 +8,11 @@ import { HttpError } from './errors/http-error';
 //  IMPORT API ROUTES
 import authRoutes from "./routes/user.route";
 import adminUserRoutes from "./routes/admin/admin.route";
+import newsRoutes from "./routes/news.route";
+import videoRouter from "./routes/video.route";
+import bookmarkRouter from "./routes/bookmark.route";
+
+
 
 const app: Application = express();
 
@@ -27,7 +32,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // API ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/admin/users', adminUserRoutes);
-
+app.use("/api/news", newsRoutes);
+app.use("/api/videos", videoRouter);
+app.use("/api/bookmarks", bookmarkRouter);
 
 app.get('/', (req: Request, res: Response) => {
     return res.status(200).json({ success: "true", message: "Welcome to the API" });
